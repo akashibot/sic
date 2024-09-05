@@ -175,6 +175,10 @@ impl ImageEngine {
                 operations::vertical_gradient::VerticalGradient::new(*colors)
                     .apply_operation(&mut self.image)
             }
+            #[cfg(feature = "imageproc-ops")]
+            ImgOp::Speech(path) => {
+                operations::speech::Speech::new(path).apply_operation(&mut self.image)
+            }
         }
     }
 

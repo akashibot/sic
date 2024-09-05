@@ -77,6 +77,15 @@ fn wrap_with(app: App<'static, 'static>) -> App<'static, 'static> {
             .long(OperationId::Threshold.as_str())
             .multiple(true),
     )
+    .arg(
+        Arg::with_name(OperationId::Speech.as_str())
+            .help("WIP")
+            .long(OperationId::Speech.as_str())
+            .takes_value(true)
+            .value_name("path to speech image")
+            .number_of_values(1)
+            .multiple(true),
+    )
 }
 
 pub fn create_app(

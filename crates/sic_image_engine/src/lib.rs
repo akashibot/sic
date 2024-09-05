@@ -41,4 +41,6 @@ pub enum ImgOp {
     Threshold,
     Unsharpen((f32, i32)),
     VerticalGradient(GradientInput),
+    #[cfg(feature = "imageproc-ops")]
+    Speech(ImageFromPath)
 }

@@ -40,6 +40,8 @@ pub enum OperationId {
     Threshold,
     Unsharpen,
     VerticalGradient,
+    #[cfg(feature = "imageproc-ops")]
+    Speech,
 
     // modifiers
     PreserveAspectRatio,
@@ -95,6 +97,8 @@ impl OperationId {
             OperationId::Threshold => 0,
             OperationId::Unsharpen => 2,
             OperationId::VerticalGradient => 2,
+            #[cfg(feature = "imageproc-ops")]
+            OperationId::Speech => 1,
 
             // image operation modifiers
             OperationId::PreserveAspectRatio => 1,
@@ -121,7 +125,7 @@ impl OperationId {
     pub fn create_instruction<'a, T>(self, inputs: T) -> Result<Instr, SicCliOpsError>
     where
         T: IntoIterator,
-        T::Item: Into<Describable<'a>> + std::fmt::Debug,
+        T::Item: Into<Describable<'a>> + Debug,
     {
         let stmt = match self {
             // image operations
@@ -186,6 +190,11 @@ impl OperationId {
                     GradientInput
                 )?))
             }
+            #[cfg(feature = "imageproc-ops")]
+            OperationId::Speech => {
+                Instr::Operation(ImgOp::Speech(parse_inputs_by_type!(inputs, ImageFromPath)?))
+            }
+
             // image operation modifiers
             OperationId::PreserveAspectRatio => Instr::EnvAdd(EnvItem::PreserveAspectRatio(
                 parse_inputs_by_type!(inputs, bool)?,
